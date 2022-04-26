@@ -1,0 +1,10 @@
+<% layout('layouts/boilerplate') %> 
+<form action="/doctor/addpatient" method="post">
+    <div class="col-md-6 offset-md-3">
+        <div class="form-group mb-3">
+            <label for="username">Patient Username</label>
+            <input type="text" name="username" class="form-control" id="username">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Patient</button>
+    </div>
+</form>

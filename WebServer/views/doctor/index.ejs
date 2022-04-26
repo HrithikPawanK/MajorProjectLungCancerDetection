@@ -1,0 +1,17 @@
+<% layout('layouts/boilerplate') %> 
+<div>
+    <% for(let patient of patients){ %>
+        <div class="card" style="width: 100%">
+            <img src="images/patient.png" class="rounded mx-auto d-block" alt="...">
+            <div class="card-body">
+              <h3 class="card-title text-center"><%=patient.username%></h5>
+              <p class="card-text text-center">Help me i'm sick</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Name: <%= patient.username %> </li>
+                <li class="list-group-item">Age: <%= patient.age %> </li>
+                <li class="list-group-item">Gender: <%= patient.gender %></li>
+            </ul>
+        </div>
+    <% } %>  
+</div>

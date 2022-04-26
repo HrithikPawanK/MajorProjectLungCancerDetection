@@ -1,0 +1,16 @@
+<% layout('layouts/boilerplate') %> 
+
+<div class="card" style="width: 100%;">
+    <div class="text-center">
+        <img src="/images/patient.png" class="rounded mx-auto d-block" alt="...">
+    </div>
+    <div class="card-body">
+        <h5 class="card-title text-center"><%= patient.username %></h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Name : <%= patient.name%> </li>
+        <li class="list-group-item">Age : <%= patient.age %> Years </li>
+        <li class="list-group-item">Gender : <%= patient.gender %> </li>
+    </ul>
+</div>
