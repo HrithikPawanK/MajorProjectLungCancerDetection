@@ -20,8 +20,10 @@ router.post('/addpatient', async (req, res) => {
     const patient = await Patient.findOne({username});
     const user = req.session.user.data;
     const doctor = await Doctor.findOne({username : user.username});
-    doctor.patients.push(patient);
-    await doctor.save();
+    if(patient) {
+        doctor.patients.push(patient);
+        await doctor.save();
+    }
     res.redirect('/doctor')
 })
 

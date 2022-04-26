@@ -86,6 +86,11 @@ app.get('/register/patient', (req, res) => {
   res.render('register/patient');
 })
 
+app.post('/register/patient', async (req, res) => {
+  await Patient.insertMany([req.body]);
+  res.redirect('/login');
+})
+
 app.post('/login', async (req, res) => {
   const user = req.body;
   const {username, password} = req.body;
