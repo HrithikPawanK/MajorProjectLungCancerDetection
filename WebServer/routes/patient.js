@@ -22,12 +22,18 @@ const axios = require('axios').default;
 // var upload = multer({ storage });
 var upload = multer({storage: fileStorageEngine});
 
+router.use((req, res, next) => {
+    if(req.session.user.doctor){
+        return res.redirect('/logout');
+    }
+    next();
+})
 
-
-router.get('/', (req, res) => {
-    const patient = req.session.user.data;
-    const data = patient.data;
-    res.render('patient', {data});
+router.get('/', async (req, res) => {
+    const user = req.session.user.data;
+    const patient = await Patient.findOne({username : user.username});
+    console.log(patient);
+    res.render('patient', {data : patient.data});
 })
 
 router.get('/addctscan', (req, res) => {
@@ -35,7 +41,6 @@ router.get('/addctscan', (req, res) => {
 })
 
 router.post('/addctscan', upload.single('ctscan'), async (req, res) => {
-
     const url = 'http://127.0.0.1:5000/predict';
     const FormData = require('form-data');
     const form = new FormData();
@@ -46,48 +51,20 @@ router.post('/addctscan', upload.single('ctscan'), async (req, res) => {
         }
     };
     const response = await axios.post(url, form, request_config); 
-    console.log(response);
-    // const fileStream = fs.createReadStream(`../public/uploads/${req.file.filename}`);
-    // const form = new FormData();
-    // form.append('file', fileStream, req.file.filename);
-    // console.table(req.file);
-    // var filepath = `../uploads/${req.file.filename}`;
-    // fs.readFile(filepath, async (error, data) => {
-    //     if (error) {
-    //         console.log(error);
-    //         return;
-    //     }
-    //     const formData = new FormData();
-    //     formData.append('file', data, { filepath: filepath, contentType: 'multipart/form-data' });
-    //     axios
-    //         .post('http://127.0.0.1:5000/predict', formData, { headers: formData.getHeaders() })
-    //         .then(resp => {
-    //              console.log('File uploaded successfully.');
-    //              res.send(resp)
-    //         });
-    // });
-    // res.send('not uploaded')
-    // const form = new FormData();
-    // const file = req.file;
-    // form.append('file', file.buffer, { filename: file.originalname });
-    // const response = await axios.post('http://127.0.0.1:5000/predict', form, {
-    //     headers: {
-    //       ...form.getHeaders(),
-    //     },
-    // });
-    // console.table(response);
-    // const response = await axios.post('http://127.0.0.1:5000/predict', formData, {
-    //     headers: {
-    //         'enctype': 'multipart/form-data',
-    //     },
-    // });
-    // const user = req.session.user.data;
-    // const patient = await Patient.findOne({user});
-    // patient.data.push({img : req.file.path, result : response});
-    // await patient.save();
-    // const response = await axios.post('http://127.0.0.1:5000/predict', {data : 'hp'});
-    // console.log(response);
-    res.send('some thing')
+    let result = response.data;
+    const user = req.session.user.data;
+    const patient = await Patient.findOne({username : user.username});
+    if(!patient){
+        res.redirect('/patient');
+    }
+    if(result){
+        result = "Lung Cancer Detected";
+    }else{
+        result = "Lung Cancer Not Detected";
+    }
+    patient.data.push({result, img : req.file.path});
+    await patient.save();
+    res.redirect('/patient');
 })
 
 router.get('/profile', (req, res) => {

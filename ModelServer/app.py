@@ -195,10 +195,12 @@ def upload_and_predict():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             img = convert_image(path)
-            result = predict(img)
-            print(result[0][0])
+            result = predict(img).astype('int64')
+            result = result[0][0]
+            print(result)
+            result = 1 if result == 1 else 0
             return make_response(jsonify({"result" : result}), 200)
-    return make_response(jsonify({"result" : 'hello'}), 200)
+    return make_response(jsonify({"result" : 'some error'}), 200)
     
 if __name__ == '__main__':
     app.run(debug=True)

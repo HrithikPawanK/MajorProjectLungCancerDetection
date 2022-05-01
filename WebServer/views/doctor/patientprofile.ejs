@@ -1,12 +1,11 @@
 <% layout('layouts/boilerplate') %> 
-
 <div>
     <% for(let d of data){ %> 
         <div class="card mb-3 mt-3 m-auto" >
-            <img src="images/lung.png" class="card-img-top m-auto" alt="..." style="width:18rem;">
+            <img src="/images/lung.png" class="card-img-top m-auto" alt="..." style="width:18rem;">
             <div class="card-body">
-              <h5 class="card-title text-center"><%= d.result %> </h5>
+                <h5 class="card-title text-center"><%= d.result %> </h5>
             </div>
-          </div>
+        </div>
     <% } %> 
 </div>
